@@ -1,34 +1,3 @@
-/* Copyright (c) 2014 Qualcomm Technologies Inc
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Qualcomm Technologies Inc nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -68,8 +37,9 @@ public class MyTeleOp extends OpMode {
 
 	DcMotor motorRight;
 	DcMotor motorLeft;
-	Servo claw;
-	Servo arm;
+    DcMotor motorFrontClaw;
+//	Servo claw;
+//	Servo arm;
 
 	/**
 	 * Constructor
@@ -105,10 +75,13 @@ public class MyTeleOp extends OpMode {
 		 */
 		motorRight = hardwareMap.dcMotor.get("motor_2");
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
+		motorRight.setDirection(DcMotor.Direction.REVERSE);
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        motorFrontClaw = hardwareMap.dcMotor.get("motor_3");
 		
-		arm = hardwareMap.servo.get("servo_1");
-		claw = hardwareMap.servo.get("servo_6");
+//		arm = hardwareMap.servo.get("servo_1");
+//		claw = hardwareMap.servo.get("servo_6");
 
 		// assign the starting position of the wrist and claw
 		armPosition = 0.2;
@@ -124,20 +97,15 @@ public class MyTeleOp extends OpMode {
 	public void loop() {
 
 		/*
-		 * Gamepad 1
+		 * Controller 1
 		 * 
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/claw via the a,b, x, y buttons
+		 * Gamepad 1 controls the motors via the left stick and right sticks
 		 */
 
-		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
-		float throttle = -gamepad1.left_stick_y;
-		float direction = gamepad1.left_stick_x;
-		float right = throttle - direction;
-		float left = throttle + direction;
+		// tank drive
+		// note that if y equal -1 then joystick is pushed all of the way forward.
+		float left = -gamepad1.left_stick_y;
+		float right = -gamepad1.right_stick_y;
 
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
@@ -147,40 +115,59 @@ public class MyTeleOp extends OpMode {
 		// the robot more precisely at slower speeds.
 		right = (float)scaleInput(right);
 		left =  (float)scaleInput(left);
-		
+
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
 
+
+        /*
+		 * Controller 2
+		 *
+		 * Gamepad 2 controls the motors via the left stick and right sticks
+		 */
+        float ctrl_two_front_claw = -gamepad2.left_stick_y;
+
+        // clip the right/left values so that the values never exceed +/- 1
+        ctrl_two_front_claw = Range.clip(ctrl_two_front_claw, -1, 1);
+
+        // scale the joystick value to make it easier to control
+        // the robot more precisely at slower speeds.
+        ctrl_two_front_claw =  (float)scaleInput(ctrl_two_front_claw);
+
+        // write the values to the motors
+        motorFrontClaw.setPower(ctrl_two_front_claw);
+
+
 		// update the position of the arm.
-		if (gamepad1.a) {
-			// if the A button is pushed on gamepad1, increment the position of
-			// the arm servo.
-			armPosition += armDelta;
-		}
-
-		if (gamepad1.y) {
-			// if the Y button is pushed on gamepad1, decrease the position of
-			// the arm servo.
-			armPosition -= armDelta;
-		}
-
-		// update the position of the claw
-		if (gamepad1.x) {
-			clawPosition += clawDelta;
-		}
-
-		if (gamepad1.b) {
-			clawPosition -= clawDelta;
-		}
-
-        // clip the position values so that they never exceed their allowed range.
-        armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
-        clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
-
-		// write position values to the wrist and claw servo
-		arm.setPosition(armPosition);
-		claw.setPosition(clawPosition);
+//		if (gamepad1.a) {
+//			// if the A button is pushed on gamepad1, increment the position of
+//			// the arm servo.
+//			armPosition += armDelta;
+//		}
+//
+//		if (gamepad1.y) {
+//			// if the Y button is pushed on gamepad1, decrease the position of
+//			// the arm servo.
+//			armPosition -= armDelta;
+//		}
+//
+//		// update the position of the claw
+//		if (gamepad1.x) {
+//			clawPosition += clawDelta;
+//		}
+//
+//		if (gamepad1.b) {
+//			clawPosition -= clawDelta;
+//		}
+//
+//        // clip the position values so that they never exceed their allowed range.
+//        armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
+//        clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
+//
+//		// write position values to the wrist and claw servo
+//		arm.setPosition(armPosition);
+//		claw.setPosition(clawPosition);
 
 
 
