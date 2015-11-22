@@ -37,11 +37,14 @@ public class MyTeleOp extends OpMode {
 	// amount to change the claw servo position by
 	double clawDelta = 0.1;
 
+    int turboDriver = 2;
+
 	DcMotor motorRight;
 	DcMotor motorLeft;
     DcMotor motorFrontArmExtend;
     DcMotor motorFrontArmFlip;
-//	Servo claw;
+
+	Servo bumper;
 //	Servo arm;
 
 	/**
@@ -84,8 +87,9 @@ public class MyTeleOp extends OpMode {
 		motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
 		motorFrontArmFlip = hardwareMap.dcMotor.get("motor_4");
 		
-//		arm = hardwareMap.servo.get("servo_1");
+		bumper = hardwareMap.servo.get("servo_1");
 //		claw = hardwareMap.servo.get("servo_6");
+        bumper.setPosition(0);
 
 		// assign the starting position of the wrist and claw
 		armPosition = 0.2;
@@ -115,15 +119,20 @@ public class MyTeleOp extends OpMode {
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
 
+        if (gamepad1.right_trigger > 0.5){
+            turboDriver = 1;
+        } else {
+            turboDriver = 2;
+        }
+
 		// scale the joystick value to make it easier to control
 		// the robot more precisely at slower speeds.
-		right = (float)scaleInput(right);
-		left =  (float)scaleInput(left);
+		right = (float)scaleInput(right/turboDriver);
+		left =  (float)scaleInput(left/turboDriver);
 
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
-
 
         /*
 		 * Controller 2
@@ -153,6 +162,24 @@ public class MyTeleOp extends OpMode {
 
         motorFrontArmFlip.setPower(ctrl_two_front_arm_flip);
 
+        if (gamepad1.left_bumper){
+            driveDirection = DcMotor.Direction.FORWARD;
+        }
+
+        if (gamepad1.right_bumper){
+            driveDirection = DcMotor.Direction.REVERSE;
+        }
+
+
+        if (gamepad2.a){
+            bumper.setDirection(Servo.Direction.FORWARD);
+            bumper.setPosition(70);
+        }
+
+        if (gamepad2.b){
+            bumper.setDirection(Servo.Direction.REVERSE);
+            bumper.setPosition(0);
+        }
 
 		// update the position of the arm.
 //		if (gamepad1.a) {
