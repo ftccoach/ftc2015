@@ -125,7 +125,7 @@ public class MyTeleOp extends OpMode {
             turboDriver = 2;
         }
 
-		// scale the joystick value to make it easier to control
+		// scale the joystick value to make it easier tocontrol
 		// the robot more precisely at slower speeds.
 		right = (float)scaleInput(right/turboDriver);
 		left =  (float)scaleInput(left/turboDriver);
