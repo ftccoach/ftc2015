@@ -23,6 +23,8 @@ public class MyTeleOp extends OpMode {
 	final static double CLAW_MIN_RANGE  = 0.20;
 	final static double CLAW_MAX_RANGE  = 0.7;
 
+	private DcMotor.Direction driveDirection = DcMotor.Direction.REVERSE;
+
 	// position of the arm servo.
 	double armPosition;
 
@@ -76,8 +78,8 @@ public class MyTeleOp extends OpMode {
 		 */
 		motorRight = hardwareMap.dcMotor.get("motor_2");
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
-		motorRight.setDirection(DcMotor.Direction.REVERSE);
-		motorLeft.setDirection(DcMotor.Direction.REVERSE);
+		motorRight.setDirection(driveDirection);
+		motorLeft.setDirection(driveDirection);
 
 		motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
 		motorFrontArmFlip = hardwareMap.dcMotor.get("motor_4");
