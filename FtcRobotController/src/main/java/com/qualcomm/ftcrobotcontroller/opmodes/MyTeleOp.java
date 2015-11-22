@@ -130,6 +130,9 @@ public class MyTeleOp extends OpMode {
 		right = (float)scaleInput(right/turboDriver);
 		left =  (float)scaleInput(left/turboDriver);
 
+        motorRight.setDirection(driveDirection);
+        motorLeft.setDirection(driveDirection);
+
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
@@ -169,7 +172,6 @@ public class MyTeleOp extends OpMode {
         if (gamepad1.right_bumper){
             driveDirection = DcMotor.Direction.REVERSE;
         }
-
 
         if (gamepad2.a){
             bumper.setDirection(Servo.Direction.FORWARD);
