@@ -37,8 +37,8 @@ public class MyTeleOp extends OpMode {
 
 	DcMotor motorRight;
 	DcMotor motorLeft;
-    DcMotor motorFrontClaw;
-    DcMotor motorFrontClawFlip;
+    DcMotor motorFrontArmExtend;
+    DcMotor motorFrontArmFlip;
 //	Servo claw;
 //	Servo arm;
 
@@ -79,8 +79,8 @@ public class MyTeleOp extends OpMode {
 		motorRight.setDirection(DcMotor.Direction.REVERSE);
 		motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        motorFrontClaw = hardwareMap.dcMotor.get("motor_3");
-        motorFrontClawFlip = hardwareMap.dcMotor.get("motor_4");
+		motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
+		motorFrontArmFlip = hardwareMap.dcMotor.get("motor_4");
 		
 //		arm = hardwareMap.servo.get("servo_1");
 //		claw = hardwareMap.servo.get("servo_6");
@@ -128,28 +128,28 @@ public class MyTeleOp extends OpMode {
 		 *
 		 * Gamepad 2 controls the motors via the left stick and right sticks
 		 */
-        float ctrl_two_front_claw = -gamepad2.left_stick_y /2;
+        float ctrl_two_arm_extend = -gamepad2.left_stick_y /2;
 
         // clip the right/left values so that the values never exceed +/- 1
-        ctrl_two_front_claw = Range.clip(ctrl_two_front_claw, -1, 1);
+		ctrl_two_arm_extend = Range.clip(ctrl_two_arm_extend, -1, 1);
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-        ctrl_two_front_claw =  (float)scaleInput(ctrl_two_front_claw);
+		ctrl_two_arm_extend =  (float)scaleInput(ctrl_two_arm_extend);
 
         // write the values to the motors
-        motorFrontClaw.setPower(ctrl_two_front_claw);
+		motorFrontArmExtend.setPower(ctrl_two_arm_extend);
 
-        float ctrl_two_front_claw_flip = -gamepad2.right_stick_y /3;
+        float ctrl_two_front_arm_flip = -gamepad2.right_stick_y /3;
 
         // clip the right/left values so that the values never exceed +/- 1
-        ctrl_two_front_claw_flip = Range.clip(ctrl_two_front_claw_flip, -1, 1);
+		ctrl_two_front_arm_flip = Range.clip(ctrl_two_front_arm_flip, -1, 1);
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-        ctrl_two_front_claw_flip =  (float)scaleInput(ctrl_two_front_claw_flip);
+		ctrl_two_front_arm_flip =  (float)scaleInput(ctrl_two_front_arm_flip);
 
-        motorFrontClawFlip.setPower(ctrl_two_front_claw_flip);
+        motorFrontArmFlip.setPower(ctrl_two_front_arm_flip);
 
 
 		// update the position of the arm.
