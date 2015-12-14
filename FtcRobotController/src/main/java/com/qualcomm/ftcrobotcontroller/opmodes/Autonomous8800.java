@@ -34,15 +34,31 @@ public class Autonomous8800 extends OpMode
         motorLeft = hardwareMap.dcMotor.get("motor_1");
     }
 
+    int step = 0;
+
     @Override
     public void loop() {
 
         try {
-            motorRight.setPower(1);
-//            motorLeft.setPower(1);
-            Thread.sleep(5000);
-            motorRight.setPower(0);
-            motorLeft.setPower(0);
+
+            switch(step){
+
+                case 0:
+                    motorLeft.setDirection(DcMotor.Direction.FORWARD);
+                    motorRight.setDirection(DcMotor.Direction.FORWARD);
+                    motorRight.setPower(0.25);
+                    motorLeft.setPower(0.25);
+                    Thread.sleep(2000);
+                    motorRight.setPower(0);
+                    motorLeft.setPower(0);
+                    break;
+                case 1:
+                    break;
+            }
+
+            step++;
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

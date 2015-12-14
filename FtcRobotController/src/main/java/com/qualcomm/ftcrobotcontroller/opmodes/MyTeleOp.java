@@ -142,7 +142,7 @@ public class MyTeleOp extends OpMode {
 		 *
 		 * Gamepad 2 controls the motors via the left stick and right sticks
 		 */
-        float ctrl_two_arm_extend = -gamepad2.left_stick_y /2;
+        float ctrl_two_arm_extend = gamepad2.left_stick_y ;
 
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_arm_extend = Range.clip(ctrl_two_arm_extend, -1, 1);
@@ -154,7 +154,7 @@ public class MyTeleOp extends OpMode {
         // write the values to the motors
 		motorFrontArmExtend.setPower(ctrl_two_arm_extend);
 
-        float ctrl_two_front_arm_flip = -gamepad2.right_stick_y /3;
+        float ctrl_two_front_arm_flip = gamepad2.right_stick_y /3;
 
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_front_arm_flip = Range.clip(ctrl_two_front_arm_flip, -1, 1);
