@@ -26,16 +26,11 @@ public class MyTeleOp extends OpMode {
 	private DcMotor.Direction driveDirection = DcMotor.Direction.REVERSE;
 
 	// position of the arm servo.
-	double armPosition;
+	double arm1Position;
+	double arm2Position;
 
 	// amount to change the arm servo position.
 	double armDelta = 0.1;
-
-	// position of the claw servo
-	double clawPosition;
-
-	// amount to change the claw servo position by
-	double clawDelta = 0.1;
 
     int turboDriver = 2;
 
@@ -44,8 +39,8 @@ public class MyTeleOp extends OpMode {
     DcMotor motorFrontArmExtend;
     DcMotor motorFrontArmFlip;
 
-	Servo bumper;
-//	Servo arm;
+	Servo arm1;
+	Servo arm2;
 
 	/**
 	 * Constructor
@@ -86,14 +81,16 @@ public class MyTeleOp extends OpMode {
 
 		motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
 		motorFrontArmFlip = hardwareMap.dcMotor.get("motor_4");
-		
-		bumper = hardwareMap.servo.get("servo_1");
-//		claw = hardwareMap.servo.get("servo_6");
-        bumper.setPosition(0);
+
+		arm1 = hardwareMap.servo.get("servo_1");//right arm
+		arm2 = hardwareMap.servo.get("servo_2");//left arm
 
 		// assign the starting position of the wrist and claw
-		armPosition = 0.2;
-		clawPosition = 0.2;
+		arm1Position = 0.01;//start pos
+		arm2Position = 0.7;//start pos
+
+		arm1.setPosition(arm1Position);
+		arm2.setPosition(arm2Position);
 	}
 
 	/*
@@ -103,6 +100,9 @@ public class MyTeleOp extends OpMode {
 	 */
 	@Override
 	public void loop() {
+
+		arm1.setPosition(arm1Position);
+		arm2.setPosition(arm2Position);
 
 		/*
 		 * Controller 1
@@ -174,14 +174,14 @@ public class MyTeleOp extends OpMode {
         }
 
         if (gamepad2.a){
-            bumper.setDirection(Servo.Direction.FORWARD);
-            bumper.setPosition(70);
-        }
+			arm1.setPosition(0.5);//right arm
+			arm2.setPosition(0.15);//left arm
+		}
 
-        if (gamepad2.b){
-            bumper.setDirection(Servo.Direction.REVERSE);
-            bumper.setPosition(0);
-        }
+//        if (gamepad2.b){
+//            bumper.setDirection(Servo.Direction.REVERSE);
+//            bumper.setPosition(0);
+//        }
 
 		// update the position of the arm.
 //		if (gamepad1.a) {
@@ -222,9 +222,9 @@ public class MyTeleOp extends OpMode {
 		 * are currently write only.
 		 */
         telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("arm", "arm:  " + String.format("%.2f", armPosition));
-        telemetry.addData("claw", "claw:  " + String.format("%.2f", clawPosition));
-        telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
+		telemetry.addData("arm1", "arm1:  " + String.format("%.2f", arm1Position));
+		telemetry.addData("arm2", "arm2:  " + String.format("%.2f", arm2Position));
+		telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
 
 	}
@@ -272,6 +272,8 @@ public class MyTeleOp extends OpMode {
 
 		// return scaled value.
 		return dScale;
+
+
 	}
 
 }

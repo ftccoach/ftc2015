@@ -48,7 +48,7 @@ public class Autonomous8800 extends OpMode
                     motorRight.setDirection(DcMotor.Direction.FORWARD);
                     motorRight.setPower(0.25);
                     motorLeft.setPower(0.25);
-                    Thread.sleep(2000);
+                    Thread.sleep(2500);
                     motorRight.setPower(0);
                     motorLeft.setPower(0);
                     break;
