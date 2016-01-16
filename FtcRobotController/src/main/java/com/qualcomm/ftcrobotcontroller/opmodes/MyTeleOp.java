@@ -86,8 +86,8 @@ public class MyTeleOp extends OpMode {
 		arm2 = hardwareMap.servo.get("servo_2");//left arm
 
 		// assign the starting position of the wrist and claw
-		arm1Position = 0.01;//start pos
-		arm2Position = 0.7;//start pos
+        arm1Position = 0.85;//start pos
+        arm2Position = 0.2;//start pos
 
 		arm1.setPosition(arm1Position);
 		arm2.setPosition(arm2Position);
@@ -142,19 +142,19 @@ public class MyTeleOp extends OpMode {
 		 *
 		 * Gamepad 2 controls the motors via the left stick and right sticks
 		 */
-        float ctrl_two_arm_extend = gamepad2.left_stick_y ;
+        float ctrl_two_arm_extend = gamepad2.left_stick_y;
 
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_arm_extend = Range.clip(ctrl_two_arm_extend, -1, 1);
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-		ctrl_two_arm_extend =  (float)scaleInput(ctrl_two_arm_extend);
+        ctrl_two_arm_extend = ctrl_two_arm_extend;
 
         // write the values to the motors
 		motorFrontArmExtend.setPower(ctrl_two_arm_extend);
 
-        float ctrl_two_front_arm_flip = gamepad2.right_stick_y /3;
+        float ctrl_two_front_arm_flip = gamepad2.right_stick_y / 4;
 
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_front_arm_flip = Range.clip(ctrl_two_front_arm_flip, -1, 1);
@@ -174,11 +174,20 @@ public class MyTeleOp extends OpMode {
         }
 
         if (gamepad2.a){
-			arm1.setPosition(0.5);//right arm
-			arm2.setPosition(0.15);//left arm
-		}
+            //arm1.setPosition(0.5);//right arm
+            //arm2.setPosition(0.15);//left arm
+            arm1Position = 0.2;
+            arm2Position = 0.79;
+            arm1.setPosition(arm1Position);
+            arm2.setPosition(arm2Position);
+        }
 
-//        if (gamepad2.b){
+        if (gamepad2.b) {
+            arm1Position = 0.8;
+            arm2Position = 0.2;
+            arm1.setPosition(arm1Position);
+            arm2.setPosition(arm2Position);
+        }
 //            bumper.setDirection(Servo.Direction.REVERSE);
 //            bumper.setPosition(0);
 //        }
@@ -274,6 +283,6 @@ public class MyTeleOp extends OpMode {
 		return dScale;
 
 
-	}
+    }
 
 }
