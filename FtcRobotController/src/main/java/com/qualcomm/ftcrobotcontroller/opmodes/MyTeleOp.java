@@ -1,5 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+//------------------------------------------------------------------------------
+//
+// MyTeleOp8800
+//
+//------------------------------------------------------------------------------
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -7,8 +13,11 @@ import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
- * <p>
- * Enables control of the robot via the gamepad
+ * This is the main file for the telop program that allows us to drive the
+ * robot via the gamepad
+ *
+ * @author Robotinatorz
+ * @version 2015-10-01
  */
 public class MyTeleOp extends OpMode {
 
@@ -63,26 +72,19 @@ public class MyTeleOp extends OpMode {
 		 * that the names of the devices must match the names used when you
 		 * configured your robot and created the configuration file.
 		 */
-		
-		/*
-		 * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot and reversed.
-		 *   
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the arm joint of the manipulator.
-		 *    "servo_6" controls the claw joint of the manipulator.
-		 */
-		motorRight = hardwareMap.dcMotor.get("motor_2");
+
+        //setup the drive motors
+        motorRight = hardwareMap.dcMotor.get("motor_2");
 		motorLeft = hardwareMap.dcMotor.get("motor_1");
 		motorRight.setDirection(driveDirection);
 		motorLeft.setDirection(driveDirection);
 
-		motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
+        //setup the main arm motors
+        motorFrontArmExtend = hardwareMap.dcMotor.get("motor_3");
 		motorFrontArmFlip = hardwareMap.dcMotor.get("motor_4");
 
-		arm1 = hardwareMap.servo.get("servo_1");//right arm
+        //setup the side servos
+        arm1 = hardwareMap.servo.get("servo_1");//right arm
 		arm2 = hardwareMap.servo.get("servo_2");//left arm
 
 		// assign the starting position of the wrist and claw
@@ -101,7 +103,8 @@ public class MyTeleOp extends OpMode {
 	@Override
 	public void loop() {
 
-		arm1.setPosition(arm1Position);
+        //initaliaze arm positions to 'up'
+        arm1.setPosition(arm1Position);
 		arm2.setPosition(arm2Position);
 
 		/*
@@ -119,6 +122,8 @@ public class MyTeleOp extends OpMode {
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
 
+        //we provided a turbo button that allows the robot to run full speed
+        //should we need the power on the ramp
         if (gamepad1.right_trigger > 0.5){
             turboDriver = 1;
         } else {
@@ -147,10 +152,6 @@ public class MyTeleOp extends OpMode {
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_arm_extend = Range.clip(ctrl_two_arm_extend, -1, 1);
 
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-        ctrl_two_arm_extend = ctrl_two_arm_extend;
-
         // write the values to the motors
 		motorFrontArmExtend.setPower(ctrl_two_arm_extend);
 
@@ -159,12 +160,13 @@ public class MyTeleOp extends OpMode {
         // clip the right/left values so that the values never exceed +/- 1
 		ctrl_two_front_arm_flip = Range.clip(ctrl_two_front_arm_flip, -1, 1);
 
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-		ctrl_two_front_arm_flip =  (float)scaleInput(ctrl_two_front_arm_flip);
+        /* scale the joystick value to make it easier to control
+        the robot more precisely at slower speeds.*/
+        ctrl_two_front_arm_flip =  (float)scaleInput(ctrl_two_front_arm_flip);
 
         motorFrontArmFlip.setPower(ctrl_two_front_arm_flip);
 
+        //provide a button to change which direction of the robot is forwards
         if (gamepad1.left_bumper){
             driveDirection = DcMotor.Direction.FORWARD;
         }
@@ -173,9 +175,8 @@ public class MyTeleOp extends OpMode {
             driveDirection = DcMotor.Direction.REVERSE;
         }
 
+        //the following 2 blocks move the side arms that we use to hit the climbers levers
         if (gamepad2.a){
-            //arm1.setPosition(0.5);//right arm
-            //arm2.setPosition(0.15);//left arm
             arm1Position = 0.2;
             arm2Position = 0.79;
             arm1.setPosition(arm1Position);
@@ -188,41 +189,6 @@ public class MyTeleOp extends OpMode {
             arm1.setPosition(arm1Position);
             arm2.setPosition(arm2Position);
         }
-//            bumper.setDirection(Servo.Direction.REVERSE);
-//            bumper.setPosition(0);
-//        }
-
-		// update the position of the arm.
-//		if (gamepad1.a) {
-//			// if the A button is pushed on gamepad1, increment the position of
-//			// the arm servo.
-//			armPosition += armDelta;
-//		}
-//
-//		if (gamepad1.y) {
-//			// if the Y button is pushed on gamepad1, decrease the position of
-//			// the arm servo.
-//			armPosition -= armDelta;
-//		}
-//
-//		// update the position of the claw
-//		if (gamepad1.x) {
-//			clawPosition += clawDelta;
-//		}
-//
-//		if (gamepad1.b) {
-//			clawPosition -= clawDelta;
-//		}
-//
-//        // clip the position values so that they never exceed their allowed range.
-//        armPosition = Range.clip(armPosition, ARM_MIN_RANGE, ARM_MAX_RANGE);
-//        clawPosition = Range.clip(clawPosition, CLAW_MIN_RANGE, CLAW_MAX_RANGE);
-//
-//		// write position values to the wrist and claw servo
-//		arm.setPosition(armPosition);
-//		claw.setPosition(clawPosition);
-
-
 
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using

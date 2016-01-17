@@ -2,23 +2,25 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 //------------------------------------------------------------------------------
 //
-// PushBotAuto
+// Autonomous8800
 //
+//------------------------------------------------------------------------------
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
- * Provide a basic autonomous operational mode that uses the left and right
- * drive motors and associated encoders implemented using a state machine for
- * the Push Bot.
+ * Built on the basic autonomous operational mode that uses the left and right
+ * drive motors
  *
- * @author SSI Robotics
- * @version 2015-08-01-06-01
+ * @author Robotinatorz
+ * @version 2015-10-01
  */
 public class Autonomous8800 extends OpMode
 
 {
+
+    //configure the motors to use
     private DcMotor motorRight;
     private DcMotor motorLeft;
 
@@ -30,6 +32,7 @@ public class Autonomous8800 extends OpMode
 
     @Override
     public void init() {
+        //initialize the 2 main driving motors
         motorRight = hardwareMap.dcMotor.get("motor_2");
         motorLeft = hardwareMap.dcMotor.get("motor_1");
     }
@@ -40,9 +43,9 @@ public class Autonomous8800 extends OpMode
     public void loop() {
 
         try {
-
+            //use a switch statment to check which operation to run
             switch(step){
-
+                //start the driving
                 case 0:
                     motorLeft.setDirection(DcMotor.Direction.FORWARD);
                     motorRight.setDirection(DcMotor.Direction.FORWARD);
@@ -52,6 +55,7 @@ public class Autonomous8800 extends OpMode
                     motorRight.setPower(0);
                     motorLeft.setPower(0);
                     break;
+                //stop the driving
                 case 1:
                     break;
             }
